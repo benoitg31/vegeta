@@ -475,6 +475,11 @@ func (a *Attacker) Workers() uint64 {
 	return a.workers
 }
 
+// MaxWorkers returns max possible workers
+func (a *Attacker) MaxWorkers() uint64 {
+	return a.maxWorkers
+}
+
 func (a *Attacker) attack(tr Targeter, atk *attack, workers *sync.WaitGroup, ticks <-chan struct{}, results chan<- *Result) {
 	defer workers.Done()
 	for range ticks {
