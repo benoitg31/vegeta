@@ -470,6 +470,11 @@ func (a *Attacker) Stop() bool {
 	}
 }
 
+// Workers returns current count of workers
+func (a *Attacker) Workers() uint64 {
+	return a.workers
+}
+
 func (a *Attacker) attack(tr Targeter, atk *attack, workers *sync.WaitGroup, ticks <-chan struct{}, results chan<- *Result) {
 	defer workers.Done()
 	for range ticks {
