@@ -29,6 +29,8 @@ type Attacker struct {
 	maxBody    int64
 	redirects  int
 	chunked    bool
+
+	currentWorkers uint64 // added
 }
 
 const (
@@ -405,6 +407,7 @@ func (a *Attacker) Attack(tr Targeter, p Pacer, du time.Duration, name string) <
 	for i := uint64(0); i < workers; i++ {
 		wg.Add(1)
 		go a.attack(tr, atk, &wg, ticks, results)
+		a.currentWorkers++
 	}
 
 	go func() {
@@ -441,6 +444,7 @@ func (a *Attacker) Attack(tr Targeter, p Pacer, du time.Duration, name string) <
 					workers++
 					wg.Add(1)
 					go a.attack(tr, atk, &wg, ticks, results)
+					a.currentWorkers++
 				}
 			}
 
@@ -472,7 +476,7 @@ func (a *Attacker) Stop() bool {
 
 // Workers returns current count of workers
 func (a *Attacker) Workers() uint64 {
-	return a.workers
+	return a.currentWorkers
 }
 
 // MaxWorkers returns max possible workers
